@@ -2,7 +2,7 @@
 #include "matr.h"
 
 
-#define THREADS_IN_BLOCK 1024
+#define THREADS_IN_BLOCK 4096
 
 
 __global__ void row_normalization_gpu(float * A, int i){
