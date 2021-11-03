@@ -2,11 +2,8 @@
 #include "matr.h"
 
 
-#define THREADS_IN_BLOCK 4096
-
 
 __global__ void row_normalization_gpu(float * A, int i){
-  //int threadId = blockIdx.y * gridDim.x + blockIdx.x * blockDim.x + threadIdx.x;
   int threadId = blockIdx.x * blockDim.x + threadIdx.x;
   if (threadId >= N)
     return;
@@ -18,7 +15,6 @@ __global__ void row_normalization_gpu(float * A, int i){
 
 
 __global__ void row_elimination_gpu(float *A, int i){
-  //int threadId = blockIdx.y * gridDim.x + blockIdx.x * blockDim.x + threadIdx.x;
   int threadId = blockIdx.x * blockDim.x + threadIdx.x;
   int r = i + threadId / (N - i) + 1;
   int c = i + threadId % (N - i);
@@ -68,6 +64,6 @@ int main(){
   initialize_matrix(A, 1, 0);
   initialize_matrix_from_another_matrix(B, A);
   double duration_gpu = GE_cuda(B);
-  printf("duration was %.4f", duration_gpu );
+  printf("%.6e", duration_gpu);
   return 0;
 }

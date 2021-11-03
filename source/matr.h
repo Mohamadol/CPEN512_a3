@@ -16,6 +16,11 @@
 #endif
 
 
+#if !defined(N)
+#define THREADS_IN_BLOCK 4096
+#endif
+
+
 float *create_matrix(){
   float *matrix = (float *)malloc(sizeof(float) * N * N);
   return matrix;
