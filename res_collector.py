@@ -14,11 +14,10 @@ res = {
 
 for N in Ns:
     for t_i, t in enumerate(threads):
-        dir = "results/threads_in_block_" + str(t_i) + "/N" + str(N) + "/" + "result.txt"
+        dir = "results/threads_in_block_" + str(t) + "/N" + str(N) + "/" + "result.txt"
         with open(dir) as f:
           line = f.readline()
-          res[str(N)].append(double(line))
-          print(res)
+          res[str(N)].append(float(line))
 
-#df = pd.DataFrame(res)
-#df.to_csv('out.csv', index=False)
+df = pd.DataFrame(res)
+df.to_csv('out.csv', index=False)
