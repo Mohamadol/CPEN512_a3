@@ -66,6 +66,6 @@ int main(){
   initialize_matrix(A, 1, 0);
   initialize_matrix_from_another_matrix(B, A);
   double duration_gpu = GE_cuda(B);
-  printf("duration was %.4f", duration);
+  printf("duration was %.4f", duration_gpu);
   return 0;
 }
