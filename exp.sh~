@@ -1,4 +1,7 @@
-for X in 8 16 128 512 1024 2048 4096
+rm -rf results
+mkdir ./results
+
+for X in 1 8 16 128 512 1024 2048 4096
 do
     mkdir ./results/threads_in_block_$X
     for Y in 64 128 256 512 1024 2048 4096
