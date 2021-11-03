@@ -19,7 +19,7 @@
 
 
 float *create_matrix(){
-  float *matrix = malloc(sizeof(float) * N * N);
+  float *matrix = (float *)malloc(sizeof(float) * N * N);
   return matrix;
 }
 
