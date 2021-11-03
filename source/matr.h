@@ -8,14 +8,12 @@
 
 
 #if !defined(N)
-#define N 3
+#define N 4096
 #endif
 
 #if !defined(PARALLEL)
 #define PARALLEL 0
 #endif
-
-
 
 
 float *create_matrix(){

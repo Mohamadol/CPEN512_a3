@@ -1,7 +1,9 @@
+#include <sys/time.h>
 #include "matr.h"
 
 
 #define THREADS_IN_BLOCK 1024
+
 
 __global__ void row_normalization_gpu(float * A, int i){
   int threadId = blockIdx.y * gridDim.x + blockIdx.x * blockDim.x + threadIdx.x;
@@ -27,13 +29,16 @@ __global__ void row_elimination_gpu(float *A, int i){
 }
 
 
-void GE_cuda(float *B){
+double GE_cuda(float *B){
   float *A;
 
   //Allocate memory on device
   cudaMalloc(&A, sizeof(float) * N * N);
   //copy the matrix from host to device
   cudaMemcpy(A, (void *)B, sizeof(float) * N * N, cudaMemcpyHostToDevice);
+
+  struct timeval begin, end;
+  gettimeofday(&begin, 0);
 
   int i=0;
   for(; i<N ; i++){
@@ -45,8 +50,13 @@ void GE_cuda(float *B){
     cudaDeviceSynchronize();
   }
 
+  gettimeofday(&end, 0);
+  double duration = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6;
+
   cudaMemcpy(B, (void *)A, sizeof(float) * N * N, cudaMemcpyDeviceToHost);
   cudaFree(A);
+
+  return duration;
 }
 
 
@@ -55,6 +65,7 @@ int main(){
   float *B = create_matrix();
   initialize_matrix(A, 1, 0);
   initialize_matrix_from_another_matrix(B, A);
-  GE_cuda(B);
+  double duration_gpu = GE_cuda(B);
+  printf("duration was %.4f", duration);
   return 0;
 }
