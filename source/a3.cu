@@ -5,7 +5,7 @@
 
 __global__ void row_normalization_gpu(float * A, int i){
   int threadId = blockIdx.y * gridDim.x + blockIdx.x * blockDim.x + threadIdx.x;
-  if (tid >= N)
+  if (threadId >= N)
     return;
   float alpha = A[i * N + i];
   __syncthreads();
@@ -36,14 +36,12 @@ void GE_cuda(float *B){
   cudaMemcpy(A, (void *)B, sizeof(float) * N * N, cudaMemcpyHostToDevice);
 
   int i=0;
-  int j;
   for(; i<N ; i++){
-    j=i;
     int blocks = (int)((N - i)/(float)THREADS_IN_BLOCK);
-    row_normalization_gpu<<blocks, THREADS_IN_BLOCK>>(A, i);
+    row_normalization_gpu<<<blocks, THREADS_IN_BLOCK>>>(A, i);
     cudaDeviceSynchronize();
     blocks = (int)((N - i - 1) * (N - i)/(float)THREADS_IN_BLOCK);
-    row_elimination_gpu<<<num_blocks, THREADS_IN_BLOCK>>>(A, i);
+    row_elimination_gpu<<<blocks, THREADS_IN_BLOCK>>>(A, i);
     cudaDeviceSynchronize();
   }
 
